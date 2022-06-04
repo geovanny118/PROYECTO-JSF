@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"/>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        
+        <script>
+            
+                $(document).ready(function(){
+                   
+                  $(".nav-item a").click(function(){
+                    $(this).tab('show');
+                  });
+                  
+                });
+        </script>
+        
+        <title>Menu padres de familia</title>
+    </h:head>
+    <h:body>
+        
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container" align="center">
+            <h1 class="display-4">Sistema Para padres de familia</h1>
+            <p class="lead">sistema para padres de familia que llegan a recoger del colegio a sus hijos.</p>
+          </div>
+        </div>
+        
+        <div align="center">
+            <h5>Bienvenido #{acudienteBean.nombre}</h5>
+        <div align="center"> 
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Recoger</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Registrar alumno</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Salir</a>
+          </li>
+        </ul>
+         </div>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                
+                <h:panelGroup rendered="#{acudienteBean.divLlega}">
+                <h:form>
+                    <center>
+                        <h3>Eliga un Carril</h3>
+                    <table>
+                      <tr>
+                          <td></td>
+                          <td>
+                              <h:selectOneRadio value="#{acudienteBean.carril}">
+                                  <f:selectItem itemValue="1" itemLabel="Carril 1"/>
+                                  <f:selectItem itemValue="2" itemLabel="Carril 2"/>
+                                  <f:selectItem itemValue="3" itemLabel="Carril 3"/>
+                              </h:selectOneRadio>
+                          </td>
+                      </tr>
+                  </table>
+                        <h:commandButton value="Llegué"  id="llega" action="#{acudienteBean.ActualizarCarril(1)}" class="btn btn-success"/>
+                    </center>
+                    
+                </h:form>
+                </h:panelGroup> 
+                
+                <h:panelGroup rendered="#{acudienteBean.divListo}">
+                    <center>
+                        <h:form>
+                            <h:commandButton value="Listo"  id="listo" action="#{acudienteBean.ActualizarCarril(0)}" class="btn btn-success"/>
+                        </h:form>
+                    </center>
+                
+                </h:panelGroup>
+                
+                
+            </div>
+          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              
+              
+            <h:form>
+                  <center>
+
+                  <h3>Registrar Alumno</h3>
+
+                  <table>
+                      <tr>
+                          <td>Nombre del alumno</td>
+                          <td><h:inputText value="#{estudianteBean.nombre}" class="form-control"  label="Nombre del alumno" required="true"/></td>
+                      </tr>
+                      <tr>
+                          <td>Sección</td>
+                          <td>
+                              <h:selectOneRadio value="#{estudianteBean.seccion}"  label="Sección" required="true">
+                                  <f:selectItem itemValue="1" itemLabel="Pre-escolar"/>
+                                  <f:selectItem itemValue="2" itemLabel="Primaria"/>
+                                  <f:selectItem itemValue="3" itemLabel="Bachillerato"/>
+                              </h:selectOneRadio>
+                          </td>
+                      </tr>
+                  </table>
+                  <h:messages style="color:red; margin: 8px" />
+                  <h:commandButton value="Guardar" action="#{acudienteBean.AgregarHijo(estudianteBean)}" class="btn btn-success"/>
+
+
+          </center>
+          </h:form>
+              
+          <h:form>
+              <center>
+                <hr/>
+
+                <h3>Alumnos Guardados</h3>
+                <h:dataTable value="#{acudienteBean.listaHijos()}" var="hijo" class="table table-striped table-hover table-bordered">
+                  <h:column>
+                      <f:facet name="header">Nombre</f:facet>
+                      <h:outputText value="#{hijo.nombre}" />
+                  </h:column>
+                  <h:column>
+                      <f:facet name="header">Sección</f:facet>
+                        <h:outputText value="#{hijo.obtenerNombreSeccion()}" />
+                  </h:column>
+                  <h:column>
+                      <f:facet name="header">Acción</f:facet>
+                      <h:commandButton value="Eliminar" action="#{acudienteBean.BorrarHijo(hijo)}" class="btn btn-danger"/>
+                  </h:column>
+
+              </h:dataTable>
+
+              <br/>
+                  
+              </center>
+          </h:form>    
+              
+    
+          </div>
+          <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+              
+              <center>
+                  <h:form>
+                      <h:commandButton value="Salir" action="index" class="btn btn-primary"/>
+                  </h:form>
+                  
+              </center>
+              
+              
+          </div>
+        </div>
+        
+        </div>
+    </h:body>
+</html>
+
